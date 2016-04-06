@@ -21,9 +21,11 @@ struct processhandler{
 	unsigned int maxCycles;
 	unsigned int maxMem;
 	unsigned int totalCycles;
-	unsigned int totalMem;
+	//unsigned int totalMem[1000];
+	int * totalMemory;
 	std::deque<process> processes;//waiting queue for processes
-	processhandler();
+	processhandler(unsigned int memSize);
+	~processhandler();
 	void addProcess(unsigned int n);
 	void printProcesses();
 	void printAverage();
@@ -35,6 +37,7 @@ struct ps{
 	int testcycles2[50];//mean 6000, SD 4000
 	int testcycles3[50];//mean 3000, SD 6000
 	int testcycles4[50];//constant values 3000
+	int testMemory[50];
 	ps();
 	results runFIFO(int *tcycles);//1 processor
 	results runFIFOmult(int *tcycles);//4 processors

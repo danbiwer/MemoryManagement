@@ -1,18 +1,5 @@
 #include "ps.h"
 
-bool compareMin(const process &a, const process &b){
-	return a.numcycles < b.numcycles;
-}
-
-bool compareMax(const process &a, const process &b){
-	return a.numcycles > b.numcycles;
-}
-
-void printArray(int *arr){//print all processes
-	for(int i=0; i<50; i++)
-		std::cout << "p" << i << ": " << arr[i] << std::endl;
-}
-
 
 void genNums(int *arr, int mean, int deviation){//fills array "arr" with random numbers using normal distribution
 	std::default_random_engine generator;
@@ -31,12 +18,17 @@ results::results(){
 		waitTime[i] = 0;
 }
 
-processhandler::processhandler(){
+processhandler::processhandler(unsigned int memSize){
 	currentPID = 0;
 	maxCycles = 11000;
-	maxMem = 100;
-	totalMem = 0;
+	//maxMem = 100;
+	//totalMem = 0;
 	totalCycles = 0;
+	totalMemory = new int[memSize];
+}
+
+processhandler::~processhandler(){
+	delete totalMemory;
 }
 
 void processhandler::addProcess(unsigned int n){//add process with cycles n
@@ -66,9 +58,9 @@ void processhandler::printProcesses(){//print all processes
 
 void processhandler::printAverage(){//print average cycles and memory
 	float averageCycles = totalCycles/currentPID;
-	float averageMem = totalMem/currentPID;
+	//float averageMem = totalMem/currentPID;
 	std::cout << "Mean Cycles: " << averageCycles << std::endl;
-	std::cout << "Mean Memory: " << averageMem << std::endl;
+	//std::cout << "Mean Memory: " << averageMem << std::endl;
 }
 
 
@@ -83,7 +75,7 @@ ps::ps(){
 
 results ps::runFIFO(int *tcycles){//runs first in first out process scheduler for one processor
 	
-	processhandler PH;
+	processhandler PH(100000);
 	results R;//results structure
 	unsigned int elapsedTime = 0;
 	unsigned int numProcesses = 0;
@@ -131,7 +123,7 @@ results ps::runFIFO(int *tcycles){//runs first in first out process scheduler fo
 
 results ps::runFIFOmult(int *tcycles){//same as 1 processor FIFO but with processors p1-p4
 	
-	processhandler PH;
+	processhandler PH(100000);
 	results R;
 	unsigned int elapsedTime = 0;
 	unsigned int numProcesses = 0;
