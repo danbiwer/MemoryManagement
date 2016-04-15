@@ -9,6 +9,6 @@
 int main(){
 	ps Psim;
 	Psim.test();
-
+	//genMem();
 	return 0;
 }

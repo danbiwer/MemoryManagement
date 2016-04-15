@@ -13,6 +13,27 @@ void genNums(int *arr, int mean, int deviation){//fills array "arr" with random 
 
 }
 
+void genMem(int *arr, unsigned int maxSize){
+	std::default_random_engine generator;
+	double sum = 0;
+	double newsum = 0;
+	double a[50];
+	for(int i=0;i<50;i++){
+		a[i] = generator() % 100;
+		sum+=a[i];
+	}
+
+	for(int i = 0; i<50;i++){
+		a[i] = a[i]/sum;
+		a[i] *= maxSize;
+		arr[i] = a[i];
+		newsum += arr[i];
+		std::cout << arr[i] << std::endl;
+	}
+	std::cout << "new sum is " << newsum/1000000 << "mb" << std::endl;
+
+}
+
 results::results(){
 	for(int i=0;i<50;i++)
 		waitTime[i] = 0;
@@ -71,11 +92,70 @@ ps::ps(){
 	genNums(testcycles1,6000,1000);//set testcycles1 to have mean of 60000 and standard deviation of 1000
 	genNums(testcycles2,6000,4000);
 	genNums(testcycles3,3000,6000);
+	genMem(mempattern, MAXMEMSIZE);
 	for(int i = 0; i<50;i++){//set all processes in testcycles4 to 3000 with no standard deviation
 		testcycles4[i] = 3000;
 	}
 }
 
+
+results ps::runFIFOsystem(int *tcycles, int *mempattern, int numProcessors){
+	
+	processhandler PH(100000);
+	results R;
+	unsigned int elapsedTime = 0;
+	unsigned int numProcesses = 0;
+	unsigned int penalty = 0;
+	unsigned int pLeft = 50;
+	process *p[numProcessors];
+	char *m[numProcessors];
+
+	for(int i = 0; i<numProcessors;i++){
+		p[i] = NULL;
+		m[i] = NULL;
+	}
+
+	while(pLeft>0){
+
+		if(((elapsedTime % 50) == 0) && (numProcesses < 50)){
+			PH.addProcess(tcycles[numProcesses]);
+			numProcesses++;
+		}
+
+		for(int i = 0; i<numProcessors;i++){
+			if(!PH.processes.empty() && (!p[i])){
+				penalty+=10;
+				p[i] = new process;
+				*p[i] = PH.processes.front();
+				PH.processes.pop_front();
+				//allocation
+				m[i] = (char*)malloc(mempattern[p[i]->pid]);
+			}
+
+			if(p[i]){
+				p[i]->numcycles--;
+				if(p[i]->numcycles==0){
+					pLeft--;
+					p[i] = NULL;
+					free(m[i]);
+				}
+			}
+		}
+
+
+		for(int i=0; i<PH.processes.size(); i++){//update all wait times that are in waiting queue
+			R.waitTime[PH.processes[i].pid]++;
+		}
+		elapsedTime++;
+	}
+	elapsedTime+=penalty;
+	R.elapsedTime = elapsedTime;
+	for(int i=0; i<numProcessors;i++){
+		if(p[i]) delete p[i];
+	}
+
+	return R;
+}
 
 results ps::runFIFO(int *tcycles, int numProcessors){
 	
@@ -86,6 +166,7 @@ results ps::runFIFO(int *tcycles, int numProcessors){
 	unsigned int penalty = 0;
 	unsigned int pLeft = 50;
 	process *p[numProcessors];
+	char *totalMemory = (char*)malloc(MAXMEMSIZE);
 
 	for(int i = 0; i<numProcessors;i++){
 		p[i] = NULL;
@@ -133,10 +214,10 @@ results ps::runFIFO(int *tcycles, int numProcessors){
 
 void ps::testFIFO(int *testcycles){
 	std::cout << "FIFO (1 PROCESSOR)" << std::endl;
-	printResults(testcycles,runFIFO(testcycles,1));
+	printResults(testcycles,runFIFOsystem(testcycles,mempattern,1));
 	std::cout << std::endl;
 	std::cout << "FIFO (4 PROCESSORS)" << std::endl;
-	printResults(testcycles,runFIFO(testcycles,4));
+	printResults(testcycles,runFIFOsystem(testcycles,mempattern,4));
 	std::cout << std::endl;
 }
 
