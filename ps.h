@@ -39,14 +39,10 @@ struct ps{
 	int testcycles4[50];//constant values 3000
 	int testMemory[50];
 	ps();
-	results runFIFO(int *tcycles);//1 processor
-	results runFIFOmult(int *tcycles);//4 processors
+	results runFIFO(int *tcycles, int numProcessors);//4 processors
 	void testFIFO(int *testcycles);
 	void test();
 	void printResults(int *testcycles, results R);
 };
 
-bool compareMin(const process &a, const process &b);
-bool compareMax(const process &a, const process &b);
 void genNums(int *arr, int mean, int deviation);//generate array of 50 random numbers using normal distribution
-void printArray(int *arr);
