@@ -28,10 +28,66 @@ void genMem(int *arr, unsigned int maxSize){
 		a[i] *= maxSize;
 		arr[i] = a[i];
 		newsum += arr[i];
-		std::cout << arr[i] << std::endl;
+		//std::cout << arr[i] << std::endl;
 	}
-	std::cout << "new sum is " << newsum/1000000 << "mb" << std::endl;
+	//std::cout << "new sum is " << newsum/1000000 << "mb" << std::endl;
 
+}
+
+memHandler::memHandler(unsigned int memSize){
+	memory = (char*)malloc(memSize);
+	for(int i=0;i<memSize;i++){
+		memory[i]='X';//x will symbolize and empty space
+	}
+	totalMemSize = memSize;
+	current = 0;
+}
+
+void memHandler::printMem(){
+	for(int i=0;i<totalMemSize;i++){
+		std::cout << i << "\t" << (int)memory[i] << std::endl;
+	}
+}
+
+bool memHandler::new_malloc(unsigned int memSize, unsigned int pid){//malloc using next best fit
+	int max = current + memSize;//maximum boundary to check for free memory
+	int i = current;//start at current
+	int newstart = current;
+	int counter = 0;//counts number of memory spaces checked
+	do{
+		if(i == max){
+			for(int n = newstart; n<i;n++){
+				memory[n] = pid;
+			}
+			current = max;
+			return 1;
+		}
+		if(memory[i] != 'X'){//if memory space is not empty
+			int newmax = (max + memSize) % totalMemSize;//find new maximum boundary
+			if(newmax < totalMemSize){//if new maximum boundary is in range of total memory size, change i to current max
+				i = max;
+				newstart = i;
+				max = newmax;//change max to newly calculated max
+			}
+			else{//if new maximum boundary is out of range of total memory size, start search at 0
+				i = 0;
+				newstart = i;
+				max = memSize;
+			}
+		}
+		else
+			i++;
+		counter++;
+	}while(counter<totalMemSize);//breaks when all memory has been checked
+	return 0;//return false if failed to find sufficient memory
+}
+
+void memHandler::new_free(unsigned int pid){//free all memory that is attached to PID
+	for(int i=0; i<totalMemSize;i++){
+		if(memory[i] == pid){
+			memory[i] = 'X';
+		}
+	}
 }
 
 results::results(){
@@ -167,6 +223,8 @@ results ps::runFIFO(int *tcycles, int numProcessors){
 	unsigned int pLeft = 50;
 	process *p[numProcessors];
 	char *totalMemory = (char*)malloc(MAXMEMSIZE);
+	int memStart;
+	int memEnd;
 
 	for(int i = 0; i<numProcessors;i++){
 		p[i] = NULL;

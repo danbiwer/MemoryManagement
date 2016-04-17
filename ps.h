@@ -22,7 +22,7 @@ struct processhandler{
 	unsigned int maxCycles;
 	unsigned int maxMem;
 	unsigned int totalCycles;
-	//unsigned int totalMem[1000];
+	//unsigned int totalMem[1000];g
 	int * totalMemory;
 	std::deque<process> processes;//waiting queue for processes
 	processhandler(unsigned int memSize);
@@ -33,6 +33,15 @@ struct processhandler{
 	process *findMin();
 };
 
+struct memHandler{
+	char *memory;//total memory
+	unsigned int totalMemSize;
+	unsigned int current;//current position to start search for memory, for next best fit
+	memHandler(unsigned int memSize);
+	bool new_malloc(unsigned int size, unsigned int pid);
+	void new_free(unsigned int pid);
+	void printMem();
+};
 struct ps{
 	int testcycles1[50];//mean 6000, SD 1000
 	int testcycles2[50];//mean 6000, SD 4000
