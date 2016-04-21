@@ -1,0 +1,435 @@
+System Malloc - 4 Processors
+allocating: 0
+allocating: 1
+allocating: 2
+allocating: 3
+freed: 0
+allocating: 4
+freed: 1
+allocating: 5
+freed: 3
+allocating: 6
+freed: 2
+allocating: 7
+freed: 6
+allocating: 8
+freed: 5
+allocating: 9
+freed: 4
+allocating: 10
+freed: 7
+allocating: 11
+freed: 8
+allocating: 12
+freed: 9
+allocating: 13
+freed: 10
+allocating: 14
+freed: 12
+allocating: 15
+freed: 13
+allocating: 16
+freed: 11
+allocating: 17
+freed: 14
+allocating: 18
+freed: 17
+allocating: 19
+freed: 16
+allocating: 20
+freed: 15
+allocating: 21
+freed: 18
+allocating: 22
+freed: 21
+allocating: 23
+freed: 19
+allocating: 24
+freed: 20
+allocating: 25
+freed: 22
+allocating: 26
+freed: 23
+allocating: 27
+freed: 24
+allocating: 28
+freed: 25
+allocating: 29
+freed: 26
+allocating: 30
+freed: 27
+allocating: 31
+freed: 28
+allocating: 32
+freed: 29
+allocating: 33
+freed: 32
+allocating: 34
+freed: 30
+allocating: 35
+freed: 31
+allocating: 36
+freed: 33
+allocating: 37
+freed: 34
+allocating: 38
+freed: 35
+allocating: 39
+freed: 36
+allocating: 40
+freed: 39
+allocating: 41
+freed: 37
+allocating: 42
+freed: 38
+allocating: 43
+freed: 40
+allocating: 44
+freed: 42
+allocating: 45
+freed: 41
+allocating: 46
+freed: 43
+allocating: 47
+freed: 44
+allocating: 48
+freed: 45
+allocating: 49
+freed: 48
+freed: 46
+freed: 47
+freed: 49
+
+New Malloc, perfect fit - 4 Processors
+allocating: 0
+allocating: 1
+allocating: 2
+allocating: 3
+freed: 0
+allocating: 4
+freed: 1
+allocating: 5
+freed: 3
+allocating: 6
+freed: 2
+allocating: 7
+freed: 6
+allocating: 8
+freed: 5
+allocating: 9
+freed: 4
+allocating: 10
+freed: 7
+allocating: 11
+freed: 8
+allocating: 12
+freed: 9
+allocating: 13
+freed: 10
+allocating: 14
+freed: 12
+allocating: 15
+freed: 13
+allocating: 16
+freed: 11
+allocating: 17
+freed: 14
+allocating: 18
+freed: 17
+allocating: 19
+freed: 16
+allocating: 20
+freed: 15
+allocating: 21
+freed: 18
+allocating: 22
+freed: 21
+allocating: 23
+freed: 19
+allocating: 24
+freed: 20
+allocating: 25
+freed: 22
+allocating: 26
+freed: 23
+allocating: 27
+freed: 24
+allocating: 28
+freed: 25
+allocating: 29
+freed: 26
+allocating: 30
+freed: 27
+allocating: 31
+freed: 28
+allocating: 32
+freed: 29
+allocating: 33
+freed: 32
+allocating: 34
+freed: 30
+allocating: 35
+freed: 31
+allocating: 36
+freed: 33
+allocating: 37
+freed: 34
+allocating: 38
+freed: 35
+allocating: 39
+freed: 36
+allocating: 40
+freed: 39
+allocating: 41
+freed: 37
+allocating: 42
+freed: 38
+allocating: 43
+freed: 40
+allocating: 44
+freed: 42
+allocating: 45
+freed: 41
+allocating: 46
+freed: 43
+allocating: 47
+freed: 44
+allocating: 48
+freed: 45
+allocating: 49
+freed: 48
+freed: 46
+freed: 47
+freed: 49
+
+New Malloc, 50% available memory - 4 Processors
+allocating: 0
+allocating: 1
+allocating: 2
+allocating: 3
+freed: 0
+allocating: 4
+freed: 1
+allocating: 5
+freed: 3
+allocating: 6
+freed: 2
+allocating: 7
+freed: 6
+allocating: 8
+freed: 5
+allocating: 9
+freed: 4
+allocating: 10
+freed: 7
+allocating: 11
+freed: 8
+allocating: 12
+freed: 9
+allocating: 13
+freed: 10
+allocating: 14
+freed: 12
+allocating: 15
+freed: 13
+allocating: 16
+freed: 11
+allocating: 17
+freed: 14
+allocating: 18
+freed: 17
+allocating: 19
+freed: 16
+allocating: 20
+freed: 15
+allocating: 21
+freed: 18
+allocating: 22
+freed: 21
+allocating: 23
+freed: 19
+allocating: 24
+freed: 20
+allocating: 25
+freed: 22
+allocating: 26
+freed: 23
+allocating: 27
+freed: 24
+allocating: 28
+freed: 25
+allocating: 29
+freed: 26
+allocating: 30
+freed: 27
+allocating: 31
+freed: 28
+allocating: 32
+freed: 29
+allocating: 33
+freed: 32
+allocating: 34
+freed: 30
+allocating: 35
+freed: 31
+allocating: 36
+freed: 33
+allocating: 37
+freed: 34
+allocating: 38
+freed: 35
+allocating: 39
+freed: 36
+allocating: 40
+freed: 39
+allocating: 41
+freed: 37
+allocating: 42
+freed: 38
+allocating: 43
+freed: 40
+allocating: 44
+freed: 42
+allocating: 45
+freed: 41
+allocating: 46
+freed: 43
+allocating: 47
+freed: 44
+allocating: 48
+freed: 45
+allocating: 49
+freed: 48
+freed: 46
+freed: 47
+freed: 49
+
+New Malloc, 10% available memory - 4 Processors
+allocating: 0
+allocating: 1
+allocating: 2
+not enough memory, pushed to wait queue: 3
+not enough memory, pushed to wait queue: 4
+not enough memory, pushed to wait queue: 5
+not enough memory, pushed to wait queue: 6
+allocating: 7
+freed: 0
+allocating from wait queue: 3
+freed: 1
+allocating from wait queue: 4
+freed: 2
+allocating from wait queue: 5
+freed: 7
+allocating from wait queue: 6
+freed: 3
+not enough memory, pushed to wait queue: 8
+allocating: 9
+freed: 4
+allocating: 10
+freed: 6
+allocating: 11
+freed: 5
+allocating from wait queue: 8
+freed: 9
+allocating: 12
+freed: 8
+allocating: 13
+freed: 10
+allocating: 14
+freed: 11
+allocating: 15
+freed: 12
+allocating: 16
+freed: 13
+allocating: 17
+freed: 14
+allocating: 18
+freed: 15
+not enough memory, pushed to wait queue: 19
+not enough memory, pushed to wait queue: 20
+not enough memory, pushed to wait queue: 21
+not enough memory, pushed to wait queue: 22
+not enough memory, pushed to wait queue: 23
+allocating: 24
+freed: 17
+allocating: 25
+freed: 16
+allocating from wait queue: 19
+freed: 18
+allocating from wait queue: 20
+freed: 24
+allocating from wait queue: 21
+freed: 25
+not enough memory, pushed to wait queue: 26
+not enough memory, pushed to wait queue: 27
+not enough memory, pushed to wait queue: 28
+not enough memory, pushed to wait queue: 29
+allocating: 30
+freed: 19
+allocating from wait queue: 22
+freed: 21
+allocating: 31
+freed: 20
+not enough memory, pushed to wait queue: 32
+allocating: 33
+freed: 22
+allocating: 34
+freed: 30
+not enough memory, pushed to wait queue: 35
+not enough memory, pushed to wait queue: 36
+not enough memory, pushed to wait queue: 37
+allocating: 38
+freed: 31
+allocating: 39
+freed: 34
+allocating: 40
+freed: 33
+allocating from wait queue: 23
+freed: 38
+allocating from wait queue: 26
+freed: 39
+allocating: 41
+freed: 23
+allocating: 42
+freed: 40
+allocating from wait queue: 27
+freed: 26
+not enough memory, pushed to wait queue: 43
+allocating: 44
+freed: 41
+allocating: 45
+freed: 27
+allocating from wait queue: 28
+freed: 42
+allocating from wait queue: 29
+freed: 44
+allocating: 46
+freed: 29
+not enough memory, pushed to wait queue: 47
+not enough memory, pushed to wait queue: 48
+not enough memory, pushed to wait queue: 49
+freed: 28
+allocating from wait queue: 32
+freed: 45
+allocating from wait queue: 35
+freed: 46
+freed: 32
+allocating from wait queue: 36
+allocating from wait queue: 37
+allocating from wait queue: 43
+freed: 35
+allocating from wait queue: 47
+freed: 36
+allocating from wait queue: 48
+freed: 37
+freed: 43
+allocating from wait queue: 49
+freed: 47
+freed: 48
+freed: 49
+
+System Run Times:
+System Malloc:	16ms
+New Malloc, perfect fit:	1192ms
+New Malloc, 50% available memory:	631ms
+New Malloc, 10% available memory:	25142ms

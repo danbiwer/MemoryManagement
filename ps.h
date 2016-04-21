@@ -2,6 +2,7 @@
 #include <deque>
 #include <random>
 #include <algorithm>
+#include <time.h>
 
 static const unsigned int MAXMEMSIZE = 10*1000*1000;//10 MB
 struct process{
@@ -27,7 +28,7 @@ struct processhandler{
 	std::deque<process> processes;//waiting queue for processes
 	processhandler(unsigned int memSize);
 	~processhandler();
-	void addProcess(unsigned int n);
+	void addProcess(unsigned int n, unsigned int mem);
 	void printProcesses();
 	void printAverage();
 	process *findMin();
@@ -37,8 +38,10 @@ struct memHandler{
 	char *memory;//total memory
 	unsigned int totalMemSize;
 	unsigned int current;//current position to start search for memory, for next best fit
+	std::deque<process> waitList;
 	memHandler(unsigned int memSize);
-	bool new_malloc(unsigned int size, unsigned int pid);
+	int get_mem_proc(unsigned int pid);
+	bool new_malloc(process p);
 	void new_free(unsigned int pid);
 	void printMem();
 };
@@ -50,7 +53,7 @@ struct ps{
 	int mempattern[50];//sum is <= 10mb
 	int testMemory[50];
 	ps();
-	results runFIFO(int *tcycles, int numProcessors);//4 processors
+	results runFIFO(int *tcycles, int *tmem, unsigned int total_mem, int numProcessors);//4 processors
 	results runFIFOsystem(int *tcycles, int *mempattern, int numProcessors);//uses system malloc/free
 	void testFIFO(int *testcycles);
 	void test();

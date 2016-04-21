@@ -49,30 +49,33 @@ void memHandler::printMem(){
 	}
 }
 
-bool memHandler::new_malloc(unsigned int memSize, unsigned int pid){//malloc using next best fit
-	int max = current + memSize;//maximum boundary to check for free memory
+bool memHandler::new_malloc(process p){//malloc using next best fit
+	unsigned int max = current + p.memory;//maximum boundary to check for free memory
 	int i = current;//start at current
 	int newstart = current;
 	int counter = 0;//counts number of memory spaces checked
 	do{
 		if(i == max){
+		//	std::cout << "current: " << current << "\tnewstart: " << newstart << "\ti: " << i << std::endl;
 			for(int n = newstart; n<i;n++){
-				memory[n] = pid;
+				memory[n] = p.pid;
 			}
 			current = max;
 			return 1;
 		}
+		if(max >= totalMemSize){
+			i = newstart = 0;
+			max = p.memory;
+		}
 		if(memory[i] != 'X'){//if memory space is not empty
-			int newmax = (max + memSize) % totalMemSize;//find new maximum boundary
+			int newmax = (max + p.memory);//find new maximum boundary
 			if(newmax < totalMemSize){//if new maximum boundary is in range of total memory size, change i to current max
-				i = max;
-				newstart = i;
+				i = newstart = max;
 				max = newmax;//change max to newly calculated max
 			}
 			else{//if new maximum boundary is out of range of total memory size, start search at 0
-				i = 0;
-				newstart = i;
-				max = memSize;
+				i = newstart = 0;
+				max = p.memory;
 			}
 		}
 		else
@@ -89,6 +92,17 @@ void memHandler::new_free(unsigned int pid){//free all memory that is attached t
 		}
 	}
 }
+
+int memHandler::get_mem_proc(unsigned int pid){
+	int count = 0;
+	for(int i=0;i<totalMemSize;i++){
+		if(memory[i] == pid){
+			count++;
+		}
+	}
+	return count;
+}
+
 
 results::results(){
 	for(int i=0;i<50;i++)
@@ -111,7 +125,7 @@ processhandler::~processhandler(){
 	delete totalMemory;
 }
 
-void processhandler::addProcess(unsigned int n){//add process with cycles n
+void processhandler::addProcess(unsigned int n, unsigned int mem = 0){//add process with cycles n
 	process newProcess;
 	newProcess.pid = currentPID;
 	unsigned int newCycles = n;
@@ -120,6 +134,7 @@ void processhandler::addProcess(unsigned int n){//add process with cycles n
 	totalCycles += newCycles;
 	newProcess.numcycles = newCycles;
 	newProcess.origCycles = newCycles;
+	newProcess.memory = mem;
 	processes.push_back (newProcess);
 	currentPID++;
 
@@ -185,12 +200,14 @@ results ps::runFIFOsystem(int *tcycles, int *mempattern, int numProcessors){
 				*p[i] = PH.processes.front();
 				PH.processes.pop_front();
 				//allocation
+				std::cout << "allocating: " << p[i]->pid<< std::endl;
 				m[i] = (char*)malloc(mempattern[p[i]->pid]);
 			}
 
 			if(p[i]){
 				p[i]->numcycles--;
 				if(p[i]->numcycles==0){
+					std::cout << "freed: " << p[i]->pid<< std::endl;
 					pLeft--;
 					p[i] = NULL;
 					free(m[i]);
@@ -213,9 +230,11 @@ results ps::runFIFOsystem(int *tcycles, int *mempattern, int numProcessors){
 	return R;
 }
 
-results ps::runFIFO(int *tcycles, int numProcessors){
+results ps::runFIFO(int *tcycles, int *tmem, unsigned int total_mem, int numProcessors){
 	
 	processhandler PH(100000);
+	//memHandler MH(400000);
+	memHandler MH(total_mem);
 	results R;
 	unsigned int elapsedTime = 0;
 	unsigned int numProcesses = 0;
@@ -226,6 +245,7 @@ results ps::runFIFO(int *tcycles, int numProcessors){
 	int memStart;
 	int memEnd;
 
+
 	for(int i = 0; i<numProcessors;i++){
 		p[i] = NULL;
 	}
@@ -233,22 +253,40 @@ results ps::runFIFO(int *tcycles, int numProcessors){
 	while(pLeft>0){
 
 		if(((elapsedTime % 50) == 0) && (numProcesses < 50)){
-			PH.addProcess(tcycles[numProcesses]);
+			PH.addProcess(tcycles[numProcesses], tmem[numProcesses]);
 			numProcesses++;
 		}
 
-		for(int i = 0; i<numProcessors;i++){
-			if(!PH.processes.empty() && (!p[i])){
-				penalty+=10;
-				p[i] = new process;
-				*p[i] = PH.processes.front();
-				PH.processes.pop_front();
+		for(int i = 0; i<numProcessors;i++){//problem is in here
+			if(!p[i]){
+				if(!MH.waitList.empty() && MH.new_malloc(MH.waitList.front())){
+					std::cout << "allocating from wait queue: " << MH.waitList.front().pid << std::endl;
+					p[i] = new process;
+					*p[i] = MH.waitList.front();
+					MH.waitList.pop_front();
+				}
+				else if(!PH.processes.empty()){
+					penalty+=10;
+					if(MH.new_malloc(PH.processes.front())){
+						std::cout << "allocating: " << PH.processes.front().pid << std::endl;
+						p[i] = new process;
+						*p[i] = PH.processes.front();
+					}
+					else{
+						std::cout << "not enough memory, pushed to wait queue: " << PH.processes.front().pid << std::endl;
+						MH.waitList.push_back(PH.processes.front());
+					}
+					PH.processes.pop_front();
+				}
 			}
 
 			if(p[i]){
 				p[i]->numcycles--;
+
 				if(p[i]->numcycles==0){
+					std::cout << "freed: " << p[i]->pid<< std::endl;
 					pLeft--;
+					MH.new_free(p[i]->pid);
 					p[i] = NULL;
 				}
 			}
@@ -265,18 +303,49 @@ results ps::runFIFO(int *tcycles, int numProcessors){
 	for(int i=0; i<numProcessors;i++){
 		if(p[i]) delete p[i];
 	}
-
+	//MH.printMem();
 	return R;
 }
 
 
 void ps::testFIFO(int *testcycles){
-	std::cout << "FIFO (1 PROCESSOR)" << std::endl;
-	printResults(testcycles,runFIFOsystem(testcycles,mempattern,1));
+	clock_t start, diff;
+	int t1,t2,t3,t4;
+
+	std::cout << "System Malloc - 4 Processors" << std::endl;
+	start = clock();
+	runFIFOsystem(testcycles,mempattern,4);
+	diff = clock() - start;
+	t1 = diff * 1000 / CLOCKS_PER_SEC;
 	std::cout << std::endl;
-	std::cout << "FIFO (4 PROCESSORS)" << std::endl;
-	printResults(testcycles,runFIFOsystem(testcycles,mempattern,4));
+
+	std::cout << "New Malloc, perfect fit - 4 Processors" << std::endl;
+	start = clock();
+	runFIFO(testcycles,mempattern, MAXMEMSIZE , 4);
+	diff = clock() - start;
+	t2 = diff * 1000 / CLOCKS_PER_SEC;
 	std::cout << std::endl;
+
+	std::cout << "New Malloc, 50% available memory - 4 Processors" << std::endl;
+	start = clock();
+	runFIFO(testcycles,mempattern, MAXMEMSIZE/2 , 4);
+	diff = clock() - start;
+	t3 = diff * 1000 / CLOCKS_PER_SEC;
+	std::cout << std::endl;
+
+	std::cout << "New Malloc, 10% available memory - 4 Processors" << std::endl;
+	start = clock();
+	runFIFO(testcycles,mempattern, MAXMEMSIZE/10 , 4);
+	diff = clock() - start;
+	t4 = diff * 1000 / CLOCKS_PER_SEC;
+	std::cout << std::endl;
+
+	std::cout << "System Run Times:" << std::endl;
+	std::cout << "System Malloc:\t" << t1 << "ms"<< std::endl;
+	std::cout << "New Malloc, perfect fit:\t" << t2 << "ms" << std::endl;
+	std::cout << "New Malloc, 50% available memory:\t" << t3 << "ms" << std::endl;
+	std::cout << "New Malloc, 10% available memory:\t" << t4 << "ms" <<std::endl;
+
 }
 
 void ps::test(){
