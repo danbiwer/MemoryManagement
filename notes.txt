@@ -18,18 +18,16 @@ to filled slots.
 If m represents memory to allocate, and n represents the size of the total memory, m <= n.
 The running time of new_malloc is O(mn) = O(n^2).
 
+new_free had a run time of O(n).  This is because it simply traversed the entire array and removed
+slots of memory.
 
 Running new_malloc with just enough total memory as there is memory to allocate gives a system
 time that is only faster than running new_malloc using only 10% of total memory.  This is because
 new_malloc has to traverse a much larger array.  Using half of the total memory yielded better
 results.
 
-new_free had a run time of O(n).  This is because it simply traversed the entire array and removed
-slots of memory.
-
 With only half of the total memory, the array that was being traversed was cut in half.  There was
-always enough memory, because all of the processes were completed and freed before all of the
-memory was used.  If we had not been using a multiple processors, this could have caused problems.
+always enough memory, because all of the processes were completed fast enough to free up memory before all of it was used up.  If we had not been using a multiple processors, this could have caused problems.
 
 With only 10% of memory available, the system time was the slowest.  This is because available
 memory was used up very quickly, and all processes had to wait until already running processes
