@@ -1,0 +1,37 @@
+------System Malloc------
+The system malloc runs much faster than the new malloc implementations.  Unfortunatley, the time
+complexity cannot be determined because we don't know how many elements are in memory.  We also
+don't know what algorithm is used by system malloc, because each operating system has a different
+way of handling memory allocation.
+
+The effects of context switching did not have a noticeable negative effect.  The amount of mallocs
+would have to me much greater, or within a recurive function, to have a noticible negative impact
+on the system running time.
+
+------New Malloc------
+The new malloc used a next fit approach on an array.  First, memory needed to be allocated once to
+create space for the entire array.  Then each element in the array needed to be initialized to 
+empty.  Every time memory was allocated, the array had to be traversed to find empty slots of
+memory.  When a section of enough memory was found, another used to change all of the empty slots
+to filled slots.
+
+If m represents memory to allocate, and n represents the size of the total memory, m <= n.
+The running time of new_malloc is O(mn) = O(n^2).
+
+
+Running new_malloc with just enough total memory as there is memory to allocate gives a system
+time that is only faster than running new_malloc using only 10% of total memory.  This is because
+new_malloc has to traverse a much larger array.  Using half of the total memory yielded better
+results.
+
+new_free had a run time of O(n).  This is because it simply traversed the entire array and removed
+slots of memory.
+
+With only half of the total memory, the array that was being traversed was cut in half.  There was
+always enough memory, because all of the processes were completed and freed before all of the
+memory was used.  If we had not been using a multiple processors, this could have caused problems.
+
+With only 10% of memory available, the system time was the slowest.  This is because available
+memory was used up very quickly, and all processes had to wait until already running processes
+were completed for memory to be freed.
+
