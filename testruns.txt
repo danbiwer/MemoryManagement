@@ -1,0 +1,59 @@
+System Run Times:
+System Malloc:	18ms
+New Malloc, perfect fit:	1144ms
+New Malloc, 50% available memory:	593ms
+New Malloc, 10% available memory:	24836ms
+
+System Run Times:
+System Malloc:	18ms
+New Malloc, perfect fit:	1154ms
+New Malloc, 50% available memory:	591ms
+New Malloc, 10% available memory:	25057ms
+
+System Run Times:
+System Malloc:	16ms
+New Malloc, perfect fit:	1164ms
+New Malloc, 50% available memory:	623ms
+New Malloc, 10% available memory:	24612ms
+
+System Run Times:
+System Malloc:	17ms
+New Malloc, perfect fit:	1146ms
+New Malloc, 50% available memory:	620ms
+New Malloc, 10% available memory:	25388ms
+
+System Run Times:
+System Malloc:	19ms
+New Malloc, perfect fit:	1172ms
+New Malloc, 50% available memory:	607ms
+New Malloc, 10% available memory:	25259ms
+
+System Run Times:
+System Malloc:	17ms
+New Malloc, perfect fit:	1168ms
+New Malloc, 50% available memory:	608ms
+New Malloc, 10% available memory:	25028ms
+
+System Run Times:
+System Malloc:	17ms
+New Malloc, perfect fit:	1174ms
+New Malloc, 50% available memory:	602ms
+New Malloc, 10% available memory:	25087ms
+
+System Run Times:
+System Malloc:	17ms
+New Malloc, perfect fit:	1197ms
+New Malloc, 50% available memory:	635ms
+New Malloc, 10% available memory:	25229ms
+
+System Run Times:
+System Malloc:	18ms
+New Malloc, perfect fit:	1161ms
+New Malloc, 50% available memory:	624ms
+New Malloc, 10% available memory:	24655ms
+
+System Run Times:
+System Malloc:	13ms
+New Malloc, perfect fit:	1188ms
+New Malloc, 50% available memory:	632ms
+New Malloc, 10% available memory:	25258ms
