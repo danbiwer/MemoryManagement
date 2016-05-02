@@ -3,6 +3,7 @@ Report
 Implementation - James // I'll try and get this done quick so you can finish your's Chris
 Our new malloc function used the next fit allocation algorithm on an array of memory. We first allocate the entire array to reserve it for our program, and we initialize all the memory to empty. 
 Whenever we are allocating memory to a process, we look through the array (from where we last left off) and keep looking until we find enough contiguous memory for the process. Once we find the contiguous memory we fill it and allow the process to run.
+If there is not enough memory for the process to run, we put the process on a wait queue. Then when we check to see if we can allocate memory for processes waiting on the wait queue before we try allocating memory for new incoming processes.
 
 Results - Skylar
 
