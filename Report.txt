@@ -1,9 +1,12 @@
 Report
 
 Implementation - James // I'll try and get this done quick so you can finish your's Chris
-Our new malloc function used the next fit allocation algorithm on an array of memory. We first allocate the entire array to reserve it for our program, and we initialize all the memory to empty. 
-Whenever we are allocating memory to a process, we look through the array (from where we last left off) and keep looking until we find enough contiguous memory for the process. Once we find the contiguous memory we fill it and allow the process to run.
-If there is not enough memory for the process to run, we put the process on a wait queue. Then when we check to see if we can allocate memory for processes waiting on the wait queue before we try allocating memory for new incoming processes.
+
+	Our new malloc function used the next fit allocation algorithm on an array of memory. We first allocate the entire array to reserve it for our program, and we initialize all the memory to empty.  Whenever we are allocating memory to a process, we look through the array (from where we last left off) and keep looking until we find enough contiguous memory for the process. Once we find the contiguous memory we fill it and allow the process to run. If there is not enough memory for the process to run, we put the process on a memory wait queue. Every time a processor completes a job, it checks the memory wait queue before checking the normal processor queue.  
+	The time complexity of new malloc is O(n2).  This is because each slot in the array must be checked individually until it has reached the number of memory slots to be allocated.  If it turns out the hole is not large enough, the process must start over from the end of the previous search.  If m represents memory to be allocated and n reprents the size of the total memory, then the time complexity of new malloc is O(mn).  Because m ≤ n, the running time can be simplified to O(n2).
+	The new free function simply goes through the entire array and clears all slots that match the process ID of the process being freed.  Because new free goes through every element in the array, the time complexity of the algorithm is O(n).
+	To test these functions, we used series of processes whose memory sums equaled the total memory size.  The distribution of cycles for each processes used a normal distribution with a mean of 6000 and a standard deviation of 1000.  Each test was simulated using four processors.   The system timer was set at the beginning of each function call and stopped after the function completed.  To run the tests where the system has only 50% and 10% of the memory required, we divided the total memory size by 2 and 10, respectively.
+
 
 Results - Skylar
 

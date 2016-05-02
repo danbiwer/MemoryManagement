@@ -13,7 +13,7 @@ void genNums(int *arr, int mean, int deviation){//fills array "arr" with random 
 
 }
 
-void genMem(int *arr, unsigned int maxSize){
+void genMem(int *arr, unsigned int maxSize){//generate list of memory whose sum equals the maxSize
 	std::default_random_engine generator;
 	double sum = 0;
 	double newsum = 0;
@@ -28,9 +28,7 @@ void genMem(int *arr, unsigned int maxSize){
 		a[i] *= maxSize;
 		arr[i] = a[i];
 		newsum += arr[i];
-		//std::cout << arr[i] << std::endl;
 	}
-	//std::cout << "new sum is " << newsum/1000000 << "mb" << std::endl;
 
 }
 
@@ -56,7 +54,6 @@ bool memHandler::new_malloc(process p){//malloc using next best fit
 	int counter = 0;//counts number of memory spaces checked
 	do{
 		if(i == max){
-		//	std::cout << "current: " << current << "\tnewstart: " << newstart << "\ti: " << i << std::endl;
 			for(int n = newstart; n<i;n++){
 				memory[n] = p.pid;
 			}
@@ -112,8 +109,6 @@ results::results(){
 processhandler::processhandler(unsigned int memSize){
 	currentPID = 0;
 	maxCycles = 11000;
-	//maxMem = 100;
-	//totalMem = 0;
 	totalCycles = 0;
 	totalMemory = new int[memSize];
 	for(int i=0;i<memSize;i++){
@@ -153,9 +148,7 @@ void processhandler::printProcesses(){//print all processes
 
 void processhandler::printAverage(){//print average cycles and memory
 	float averageCycles = totalCycles/currentPID;
-	//float averageMem = totalMem/currentPID;
 	std::cout << "Mean Cycles: " << averageCycles << std::endl;
-	//std::cout << "Mean Memory: " << averageMem << std::endl;
 }
 
 
@@ -233,7 +226,6 @@ results ps::runFIFOsystem(int *tcycles, int *mempattern, int numProcessors){
 results ps::runFIFO(int *tcycles, int *tmem, unsigned int total_mem, int numProcessors){
 	
 	processhandler PH(100000);
-	//memHandler MH(400000);
 	memHandler MH(total_mem);
 	results R;
 	unsigned int elapsedTime = 0;
@@ -257,15 +249,15 @@ results ps::runFIFO(int *tcycles, int *tmem, unsigned int total_mem, int numProc
 			numProcesses++;
 		}
 
-		for(int i = 0; i<numProcessors;i++){//problem is in here
+		for(int i = 0; i<numProcessors;i++){
 			if(!p[i]){
-				if(!MH.waitList.empty() && MH.new_malloc(MH.waitList.front())){
+				if(!MH.waitList.empty() && MH.new_malloc(MH.waitList.front())){//check memory wait queue first
 					std::cout << "allocating from wait queue: " << MH.waitList.front().pid << std::endl;
 					p[i] = new process;
 					*p[i] = MH.waitList.front();
 					MH.waitList.pop_front();
 				}
-				else if(!PH.processes.empty()){
+				else if(!PH.processes.empty()){//check normal process wait queue
 					penalty+=10;
 					if(MH.new_malloc(PH.processes.front())){
 						std::cout << "allocating: " << PH.processes.front().pid << std::endl;
@@ -303,7 +295,6 @@ results ps::runFIFO(int *tcycles, int *tmem, unsigned int total_mem, int numProc
 	for(int i=0; i<numProcessors;i++){
 		if(p[i]) delete p[i];
 	}
-	//MH.printMem();
 	return R;
 }
 
